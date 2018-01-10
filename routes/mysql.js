@@ -5,11 +5,11 @@ var Excel = require('exceljs');
 var excelbuilder = require('msexcel-builder');
 var XLSX = require('xlsx');
 var connection = mysql.createConnection({
-    host     : 'dmks.iptime.org',
-    user     : 'root',
-    password : 'Akrdjfk!@',
-    port     : '14000',
-    database : 'dev_spider'
+    host     : '********',
+    user     : '****',
+    password : '*********',
+    port     : '********',
+    database : '*****'
 });
 connection.connect(function(err) {
     if (err) throw err

@@ -5,7 +5,7 @@ var router = express.Router();
 
 router.get('/', function(req, res, next) {
     console.log(logger(":remote-addr"));
-    var ip = "1.217.87.172";
+    var ip = "****IPAddress****";
     var geo = geoip.lookup(ip);
     console.log(geo);
     console.log(geo.city);
