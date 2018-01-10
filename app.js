@@ -57,31 +57,31 @@ app.all("/session", function(req, res) {
 });
 
 /// MYSQL 테스트
-app.all("/app1/", function(req, res) {
+app.all("/db/", function(req, res) {
     console.log('redirecting to Server1');
     Proxy.web(req, res, {target: Server1});
 });
 
-app.all("/app1/user/", function(req, res) {
+app.all("/db/user/", function(req, res) {
     console.log('redirecting to Server1');
     Proxy.web(req, res, {target: Server5});
 });
 
-app.all("/app1/keyword/:id", function(req, res) {
+app.all("/db/keyword/:id", function(req, res) {
     var id = req.params.id;
     Proxy.web(req, res, {target: 'http://localhost:3000/mysql/keyword/' + id});
 });
 
-app.all("/app1/excel/*", function(req, res) {
+app.all("/db/excel/*", function(req, res) {
     Proxy.web(req, res, {target: 'http://localhost:3000/mysql/excel'});
 });
 
-app.all("/app2/", function(req, res) {
+app.all("/proxy2/", function(req, res) {
     console.log('redirecting to Server2');
     Proxy.web(req, res, {target: Server2});
 });
 
-app.all("/app3/", function(req, res) {
+app.all("/proxy1/", function(req, res) {
     console.log('redirecting to Server3');
     Proxy.web(req, res, {target: Server3});
 });
