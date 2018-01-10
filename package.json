@@ -1,0 +1,32 @@
+{
+  "name": "project1",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www"
+  },
+  "dependencies": {
+    "bcrypt-nodejs": "0.0.3",
+    "body-parser": "~1.18.2",
+    "connect-flash": "^0.1.1",
+    "cookie-parser": "~1.4.3",
+    "debug": "~2.6.9",
+    "ejs": "~2.5.7",
+    "excel-export": "^0.5.1",
+    "exceljs": "^0.8.1",
+    "express": "~4.15.5",
+    "express-mysql": "0.0.1",
+    "express-session": "^1.15.6",
+    "geoip-lite": "^1.2.1",
+    "http-proxy": "^1.16.2",
+    "morgan": "~1.9.0",
+    "msexcel-builder": "0.0.2",
+    "passport": "^0.4.0",
+    "passport-local": "^1.0.0",
+    "restreamer": "^0.1.1",
+    "serve-favicon": "~2.4.5",
+    "sys": "0.0.1",
+    "vhost": "^3.0.2",
+    "xlsx": "^0.11.17"
+  }
+}
