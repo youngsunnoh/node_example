@@ -5,11 +5,7 @@ var Excel = require('exceljs');
 var excelbuilder = require('msexcel-builder');
 var XLSX = require('xlsx');
 var connection = mysql.createConnection({
-    host     : '********',
-    user     : '****',
-    password : '*********',
-    port     : '********',
-    database : '*****'
+    //DB 연결 정보
 });
 connection.connect(function(err) {
     if (err) throw err

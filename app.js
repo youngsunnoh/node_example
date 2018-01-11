@@ -20,6 +20,7 @@ var users = require('./routes/users');
 var mysql = require('./routes/mysql');
 var sessionTest = require('./routes/sessionTest');
 var requestInfo = require('./routes/requestInfo');
+var async = require('./routes/async');
 
 var app = express(); //express 선언
 var options = { //proxy 서버 옵션(https://github.com/chimurai/http-proxy-middleware#options)
@@ -34,6 +35,19 @@ var Server1 = 'http://localhost:3000/mysql',
     Server3 = 'http://naver.com',
     Server4 = 'http://localhost:3000/mysql/keyword',
     Server5 = 'http://localhost:3000/mysql/user';
+
+/// Async
+app.all("/waterfall", function(req, res) {
+    Proxy.web(req, res, {target: 'http://localhost:3000/async/waterfall'});
+});
+
+app.all("/series", function(req, res) {
+    Proxy.web(req, res, {target: 'http://localhost:3000/async/series'});
+});
+
+app.all("/parallel", function(req, res) {
+    Proxy.web(req, res, {target: 'http://localhost:3000/async/parallel'});
+});
 
 
 /// Request_Info
@@ -115,6 +129,7 @@ app.use('/users', users);
 app.use('/mysql', mysql);
 app.use('/sessionTest', sessionTest);
 app.use('/requestInfo', requestInfo);
+app.use('/async', async);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
