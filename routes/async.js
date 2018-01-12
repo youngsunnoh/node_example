@@ -1,10 +1,7 @@
 var async = require('async');
 var express = require('express');
 var router = express.Router();
-var mysql = require('mysql');
-var connection = mysql.createConnection({
-    //DB 연결 정보
-});
+var getConnection = require('../config/mysql-connection.js');
 var timestamp = new Date().getTime();
 
 //병렬 처리
@@ -38,39 +35,55 @@ router.get('/parallel', function(req, res, next) {
 router.get('/series', function(req, res, next) {
     async.series([ //독립적인 작업을 순차적으로 실행되며 이전 작업의 결과물에 상관없이 수행되는 작업일 경우)
         function(callback){ //실행1
-            connection.query("select * from dev_account" ,function(err, rows){
-                if(!err) {
-                    callback(err,rows); ////에러를 null으로 넘기면 에러가 발생하더라도 다음 작업
-                }else{
-                    callback(err,"error1");
-                }
+            getConnection(function (err, con) {
+                con.query("select * from dev_account" ,function(err, rows){
+                    if(!err) {
+                        callback(err,rows); ////에러를 null으로 넘기면 에러가 발생하더라도 다음 작업
+                        con.release();
+                    }else{
+                        callback(err,"error1");
+                        con.release();
+                    }
+                });
             });
         },
         function(callback){
-            connection.query("select * from dev_crawl_group", function(err, rows){
-                if(!err) {
-                    callback(err,rows);
-                }else{
-                    callback(err, "error2");
-                }
+            getConnection(function (err, con) {
+                con.query("select * from dev_crawl_group", function (err, rows) {
+                    if (!err) {
+                        callback(err, rows);
+                        con.release();
+                    } else {
+                        callback(err, "error2");
+                        con.release();
+                    }
+                });
             });
         },
         function(callback){
-            connection.query("select * from dev_keyword_group", function(err, rows){
-                if(!err) {
-                    callback(err,rows);
-                }else{
-                    callback(err, "error3");
-                }
+            getConnection(function (err, con) {
+                con.query("select * from dev_keyword_group", function (err, rows) {
+                    if (!err) {
+                        callback(err, rows);
+                        con.release();
+                    } else {
+                        callback(err, "error3");
+                        con.release();
+                    }
+                });
             });
         },
         function(callback){
-            connection.query("select * from dev_schedule_group",  function(err, rows){
-                if(!err) {
-                    callback(err,rows);
-                }else{
-                    callback(err, "error4");
-                }
+            getConnection(function (err, con) {
+                con.query("select * from dev_schedule_group", function (err, rows) {
+                    if (!err) {
+                        callback(err, rows);
+                        con.release();
+                    } else {
+                        callback(err, "error4");
+                        con.release();
+                    }
+                });
             });
         }
     ],
@@ -88,42 +101,58 @@ router.get('/waterfall', function(req, res, next) {
     async.waterfall([ //순차적으로 실행
         function(callback){ //실행1
             console.log("select");
-            connection.query("select * from dev_account" ,function(err, rows){
-                if(!err) { // 쿼리 실행 여부
-                    callback(err,rows); // 다음 함수로 쿼리의 결과를 파라미터로 넘겨준다.
-                }else{
-                    callback(err,"error1"); // 다음 함수로 에러라는 문구를 파라미터로 넘겨준다.
-                }
+            getConnection(function (err, con) {
+                con.query("select * from dev_account" ,function(err, rows){
+                    if(!err) { // 쿼리 실행 여부
+                        callback(err,rows); // 다음 함수로 쿼리의 결과를 파라미터로 넘겨준다.
+                        con.release();
+                    }else{
+                        callback(err,"error1"); // 다음 함수로 에러라는 문구를 파라미터로 넘겨준다.
+                        con.release();
+                    }
+                });
             });
         },
         function(arg2,callback){ //실행2 ( arg2, 첫번째 함수에서 넘어온 값 )
             console.log(arg2[0].USER_ID); // 첫 번째 함수에서 넘어온 값 제어
-            connection.query("insert into async2 set ?", data, function(err, result2){
-                if(!err) {
-                    callback(err, "success2"); //데이터 입력 성공
-                }else{
-                    callback(err, "error2"); //데이터 입력 에러
-                }
+            getConnection(function (err, con) {
+                con.query("insert into async2 set ?", data, function (err, result2) {
+                    if (!err) {
+                        callback(err, "success2"); //데이터 입력 성공
+                        con.release();
+                    } else {
+                        callback(err, "error2"); //데이터 입력 에러
+                        con.release();
+                    }
+                });
             });
         },
         function(arg3,callback){
             console.log(arg3); // success & error String value
-            connection.query("insert into async3 set ?", data, function(err, result3){
-                if(!err) {
-                    callback(err, "success3"); //데이터 입력 성공
-                }else{
-                    callback(err, "error3");  //데이터 입력 에러
-                }
+            getConnection(function (err, con) {
+                con.query("insert into async3 set ?", data, function (err, result3) {
+                    if (!err) {
+                        callback(err, "success3"); //데이터 입력 성공
+                        con.release();
+                    } else {
+                        callback(err, "error3");  //데이터 입력 에러
+                        con.release();
+                    }
+                });
             });
         },
             function(arg4,callback){
                 console.log(arg4);  // success & error String value
-                connection.query("insert into async4 set ?", data, function(err, result4){
-                    if(!err) {
-                        callback(err, "success4"); //데이터 입력 성공
-                    }else{
-                        callback(err, "error4");  //데이터 입력 에러
-                    }
+                getConnection(function (err, con) {
+                    con.query("insert into async4 set ?", data, function (err, result4) {
+                        if (!err) {
+                            callback(err, "success4"); //데이터 입력 성공
+                            con.release();
+                        } else {
+                            callback(err, "error4");  //데이터 입력 에러
+                            con.release();
+                        }
+                    });
                 });
             }
     ],
