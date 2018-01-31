@@ -21,6 +21,7 @@ var mysql = require('./routes/mysql');
 var sessionTest = require('./routes/sessionTest');
 var requestInfo = require('./routes/requestInfo');
 var async = require('./routes/async');
+var log = require('./routes/logpresso');
 
 var app = express(); //express 선언
 var options = { //proxy 서버 옵션(https://github.com/chimurai/http-proxy-middleware#options)
@@ -35,6 +36,13 @@ var Server1 = 'http://localhost:3000/mysql',
     Server3 = 'http://naver.com',
     Server4 = 'http://localhost:3000/mysql/keyword',
     Server5 = 'http://localhost:3000/mysql/user';
+
+// logpresso 테스트
+app.all("/log", function(req, res) {
+    console.log("dd");
+    Proxy.web(req, res, {target: 'http://localhost:3000/log/log'});
+});
+
 
 /// Async
 app.all("/waterfall", function(req, res) {
@@ -110,7 +118,7 @@ app.set('view engine', 'ejs');
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
-app.use(logger('combined')); // combined,common,dev,short,tiny
+app.use(logger('dev')); // combined,common,dev,short,tiny
 /*app.use(logger('dev'));*/
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -127,6 +135,7 @@ app.use(session({
 app.use('/', index);
 app.use('/users', users);
 app.use('/mysql', mysql);
+app.use('/log', log);
 app.use('/sessionTest', sessionTest);
 app.use('/requestInfo', requestInfo);
 app.use('/async', async);
